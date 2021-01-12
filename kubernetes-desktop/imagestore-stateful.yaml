@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: imagestore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: imagestore
+  serviceName: "imagestorage"
+  template:
+    metadata:
+      labels:
+        app: imagestore
+    spec:
+      containers:
+      - name: imagestore
+        image: alexandrakarlsson/imagestore
+        ports:
+        - containerPort: 8010
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 400Mi
+
+        volumeMounts:
+        - name: imagestore
+          mountPath: /home/node/app/images     
+
+  volumeClaimTemplates:
+  - metadata:
+      name: imagestore
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 250Mi

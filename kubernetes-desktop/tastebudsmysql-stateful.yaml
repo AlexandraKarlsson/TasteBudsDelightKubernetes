@@ -1,0 +1,40 @@
+# > kubectl apply -f tastebudsmysql-stateful.yaml
+# > kubectl delete -f tastebudsmysql-stateful.yaml
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tastebudsmysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tastebudsmysql
+  serviceName: "tastebudsdb"
+  template:
+    metadata:
+      labels:
+        app: tastebudsmysql
+    spec:
+      containers:
+      - name: tastebudsmysql
+        image: mysql        
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: example
+        ports:
+        - containerPort: 3306
+        #  name: tastebudsmysql
+        # add resources and limits
+        volumeMounts:
+        - name: tastebudsmysql
+          mountPath: /var/lib/mysql     
+
+  volumeClaimTemplates:
+  - metadata:
+      name: tastebudsmysql
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 400Mi

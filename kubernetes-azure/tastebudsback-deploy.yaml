@@ -1,0 +1,34 @@
+# > kubectl apply -f tastebudsback-deploy.yaml
+# > kubectl delete -f tastebudsback-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tastebudsback
+  labels:
+    app: tastebudsback
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tastebudsback
+  template:
+    metadata:
+      labels:
+        app: tastebudsback
+    spec:
+      containers:
+      - name: tastebudsback
+        image: alexandrakarlsson/tastebudsback
+        env:
+        - name: SQL_HOST
+          value: "tastebudsmysql"  
+        - name: SQL_USER
+          value: "root"
+        - name: SQL_PASSWORD
+          value: "example"
+        - name: SQL_DATABASE
+          value: "tastebuds"      
+        ports:
+        - containerPort: 8000
+          name: tastebudsback

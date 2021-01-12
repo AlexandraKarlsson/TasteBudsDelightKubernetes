@@ -1,0 +1,16 @@
+# > kubectl apply -f tastebudsmysql-service.yaml
+# > kubectl delete -f tastebudsmysql-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tastebudsmysql
+  labels: 
+    app: tastebudsmysql
+spec:
+  ports:
+  - port: 3306
+    name: tastebudsmysql
+  selector:
+    app: tastebudsmysql
+  clusterIP: None

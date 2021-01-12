@@ -1,0 +1,28 @@
+# > kubectl apply -f tastebudsadm-deploy.yaml
+# > kubectl delete -f tastebudsadm-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tastebudsadm
+  labels:
+    app: tastebudsadm
+spec:
+  selector:
+    matchLabels:
+      app: tastebudsadm
+  template:
+    metadata:
+      labels:
+        app: tastebudsadm
+    spec:
+      containers:
+      - name: tastebudsadm
+        image: adminer
+        env:
+        - name: ADMINER_DESIGN
+          value: "pappu687"
+          # value: "nette"         
+        ports:
+        - containerPort: 8080
+          name: tastebudsadm

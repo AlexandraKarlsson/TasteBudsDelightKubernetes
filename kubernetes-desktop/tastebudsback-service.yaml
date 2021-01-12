@@ -1,0 +1,19 @@
+# > kubectl apply -f tastebudsback-service.yaml
+# > kubectl delete -f tastebudsback-service.yaml
+# To access adminer GUI
+# http://localhost:<NodePort>
+# http://localhost:30733
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tastebudsback
+  labels:
+    app: tastebudsback
+spec:
+  selector:
+    app: tastebudsback
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: NodePort

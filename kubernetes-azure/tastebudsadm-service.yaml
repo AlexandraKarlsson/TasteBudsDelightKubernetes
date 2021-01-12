@@ -1,0 +1,24 @@
+# > kubectl apply -f tastebudsadm-service.yaml
+# > kubectl delete -f tastebudsadm-service.yaml
+# To access adminer GUI
+# http://localhost:<NodePort>
+# http://localhost:30733
+# System:   MYSQL
+# Server:   hfmysql
+# Username: root
+# Password: example
+# Database: empty or name of database
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tastebudsadm
+  labels:
+    app: tastebudsadm
+spec:
+  selector:
+    app: tastebudsadm
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: NodePort

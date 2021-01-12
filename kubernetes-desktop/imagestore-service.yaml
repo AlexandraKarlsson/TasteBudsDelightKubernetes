@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: imagestore
+  labels:
+    app: imagestore
+spec:
+  selector:
+    app: imagestore
+  ports:
+  - port: 8010
+    name: imagestore
+  type: NodePort
+#  clusterIP: None

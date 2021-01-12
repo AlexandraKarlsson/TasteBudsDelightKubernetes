@@ -1,0 +1,19 @@
+# > kubectl apply -f tastebudsmysql-service.yaml
+# > kubectl delete -f tastebudsmysql-service.yaml
+
+# Test mysql and the service
+# > kubectl run -it --rm --image=mysql --restart=Never mysql-client -- mysql -h hfmysql -pexample
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tastebudsmysql
+  labels: 
+    app: tastebudsmysql
+spec:
+  ports:
+  - port: 3306
+    name: tastebudsmysql
+  selector:
+    app: tastebudsmysql
+  clusterIP: None

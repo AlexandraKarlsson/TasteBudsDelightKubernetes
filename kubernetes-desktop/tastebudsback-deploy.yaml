@@ -1,0 +1,63 @@
+# > kubectl apply -f tastebudsback-deploy.yaml
+# > kubectl delete -f tastebudsback-deploy.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tastebudsback
+  labels:
+    app: tastebudsback
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tastebudsback
+  template:
+    metadata:
+      labels:
+        app: tastebudsback
+    spec:
+      containers:
+        - name: tastebudsback
+          image: alexandrakarlsson/tastebudsback
+          ports:
+            - containerPort: 8000
+              name: tastebudsback
+          env:
+            - name: SQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_host
+            - name: SQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_user
+            - name: SQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_password
+            - name: SQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_database
+          # resources:
+          # requests:
+          #   cpu: 250m
+          #   memory: 64Mi
+          # limits:
+          #   cpu: 500m
+          #   memory: 400Mi
+
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+
+      volumes:
+        - name: config
+          configMap:
+            name: tastebuds-configmap

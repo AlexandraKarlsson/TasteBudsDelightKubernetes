@@ -28,11 +28,20 @@ spec:
 
         volumeMounts:
         - name: imagestore
-          mountPath: /home/node/app/images     
+          mountPath: /home/node/app/images    
+        - name: imagebackup
+          mountPath: /home/node/app/backup
 
   volumeClaimTemplates:
   - metadata:
       name: imagestore
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 250Mi
+  - metadata:
+      name: imagebackup
     spec:
       accessModes: [ "ReadWriteMany" ]
       resources:

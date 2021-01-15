@@ -37,16 +37,34 @@ spec:
 
         volumeMounts:
         - name: imagestore
-          mountPath: /home/node/app/images     
+          mountPath: /home/node/app/images  
+        - name: imagebackup
+          mountPath: /home/node/app/backup  
+            
       volumes:
       - name: imagestore
         persistentVolumeClaim:
           claimName: imagestore-azure-file 
+      - name: imagebackup
+        persistentVolumeClaim:
+          claimName: imagebackup-azure-file 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: imagestore-azure-file
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: imagebackup-azure-file
 spec:
   accessModes:
   - ReadWriteMany

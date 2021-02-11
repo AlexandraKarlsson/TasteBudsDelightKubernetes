@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: imagestore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: imagestore
+  serviceName: "imagestorage"
+  template:
+    metadata:
+      labels:
+        app: imagestore
+    spec:
+      containers:
+        - name: imagestore
+          image: alexandrakarlsson/imagestore
+          ports:
+            - containerPort: 8010
+          resources:
+            requests:
+              cpu: 250m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 400Mi
+
+          volumeMounts:
+            - name: azurefile-images-vol
+              mountPath: /home/node/app/images
+            - name: azurefile-backup-vol
+              mountPath: /home/node/app/backup
+
+      volumes:
+        - name: azurefile-images-vol
+          persistentVolumeClaim:
+            claimName: azurefile-images
+        - name: azurefile-backup-vol
+          persistentVolumeClaim:
+            claimName: azurefile-backup
+      # volumes:
+      #   - name: azurefile-images-vol
+      #     azureFile:
+      #       secretName: tastebuds-storage-secret
+      #       shareName: tastebudsimages
+      #       readOnly: false
+      #   - name: azurefile-backup-vol
+      #     azureFile:
+      #       secretName: tastebuds-storage-secret
+      #       shareName: tastebudsbackup
+      #       readOnly: false

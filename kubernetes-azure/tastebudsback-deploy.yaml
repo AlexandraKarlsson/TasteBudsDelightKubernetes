@@ -8,7 +8,7 @@ metadata:
   labels:
     app: tastebudsback
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: tastebudsback
@@ -18,17 +18,37 @@ spec:
         app: tastebudsback
     spec:
       containers:
-      - name: tastebudsback
-        image: alexandrakarlsson/tastebudsback
-        env:
-        - name: SQL_HOST
-          value: "tastebudsmysql"  
-        - name: SQL_USER
-          value: "root"
-        - name: SQL_PASSWORD
-          value: "example"
-        - name: SQL_DATABASE
-          value: "tastebuds"      
-        ports:
-        - containerPort: 8000
-          name: tastebudsback
+        - name: tastebudsback
+          image: alexandrakarlsson/tastebudsback
+          ports:
+            - containerPort: 8000
+              name: tastebudsback
+          env:
+            - name: SQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_host
+            - name: SQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_user
+            - name: SQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_password
+            - name: SQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tastebuds-configmap
+                  key: sql_database
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: tastebuds-configmap
